@@ -1,9 +1,11 @@
 
-
+canvasWidth = 600;
+canvasHeight = 400;
 
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
+colorsList = ["black", "red", "yellow", "green", "blue", "pink"]
 
 const recPositions = [
     {x: 0, y: 0, width: 40, height: 40, color: "black"},
@@ -49,13 +51,23 @@ function mouseMoveHandler(event, rec, xOffset, yOffset) {
 function mouseUpHandler(){
     canvas.removeEventListener("mousemove", currentMoveHandler);
     canvas.removeEventListener("mouseup", mouseUpHandler);
-    console.log('removed move and up listeners');
 }
 
 function drawAllRects(){
     recPositions.forEach(p => {
         drawRect(p.x, p.y, p.width, p.height, p.color);
     })
+}
+
+function addRectangle(){
+    const color = colorsList[getRandomInt(colorsList.length)];
+    const randomSize = getRandomInt(50);
+    const randomX = getRandomInt(canvasWidth - randomSize);
+    const randomY = getRandomInt(canvasHeight- randomSize);
+    recPositions.push(
+        {x: randomX, y: randomY, width: randomSize, height: randomSize, color: color}
+    );
+    drawAllRects();
 }
 
 function getRandomInt(max) {
@@ -68,10 +80,6 @@ function drawRect(x, y, w, h, color = "black"){
 }
 
 
-// Mouse position
-// canvas.addEventListener("mousemove", (event) => {
-//     console.log(getMousePos(canvas, event));
-// })
 function getMousePos(canvas, evt) {
     const rect = canvas.getBoundingClientRect();
     return {
